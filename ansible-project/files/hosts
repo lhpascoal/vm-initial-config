@@ -1,0 +1,8 @@
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+192.168.1.200 node-master.startit.com.br node-master
+192.168.1.201 node-minion01.startit.com.br node-minion01
+192.168.1.202 node-minion02.startit.com.br node-minion02
+192.168.1.203 node-minion03.startit.com.br node-minion03
+192.168.1.204 node-minion04.startit.com.br node-minion04

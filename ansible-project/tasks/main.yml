@@ -1,0 +1,83 @@
+---
+- name: "***** APPLY LINUX TEMPLATE *****"
+  hosts: rancher
+  gather_facts: no
+
+  tasks:
+
+    - name: Change hostname
+      hostname:
+        name: "{{ ansible_hostname }}"      
+   
+    - name: Create directory .ssh
+      file:
+        path: ~/.ssh
+        state: directory
+
+    - name: Copying linux profile
+      become: true 
+      copy:
+        src: /root/ansible-project/files/profile_startit.sh 
+        dest: /etc/profile.d/profile_startit.sh
+
+    - name: Copying ssh key
+      become: true
+      copy:
+        src: /root/ansible-project/files/authorized_keys
+        dest: ~/.ssh/authorized_keys
+
+    - name: Copying hosts file
+      become: true
+      copy:
+        src: /root/ansible-project/files/hosts
+        dest: /etc/hosts
+
+
+    - name: Disable SELinux
+      selinux:
+        state: disabled
+
+    - name: Disable firewalld
+      ansible.builtin.systemd:
+        name: firewalld
+        enabled: no
+        state: stopped
+
+    - name: Upgrade all packages
+      yum:
+        name: '*'
+        state: latest
+
+    - name: Install some packages
+      ansible.builtin.package:
+         name: 
+           - yum-utils
+           - vim
+           - wget
+           - telnet
+         state: present
+
+    - name: Add Docker Repository
+      shell: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+    
+    - name: Install Docker
+      ansible.builtin.package:
+         name:
+           - docker-ce
+           - docker-ce-cli
+           - containerd.io
+         state: present
+
+    - name: Enable and Start Docker.
+      ansible.builtin.systemd:
+        name: docker
+        enabled: yes
+        state: started
+
+    - name: Reboot host
+      reboot:
+        connect_timeout: 5
+        reboot_timeout: 600
+        pre_reboot_delay: 0
+        post_reboot_delay: 30
+        test_command: whoami

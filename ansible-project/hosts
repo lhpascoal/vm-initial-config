@@ -1,0 +1,16 @@
+[rancher]
+#192.168.1.201
+
+
+#192.168.1.200 ansible_hostname=node-master.startit.com.br
+192.168.1.201 ansible_hostname=node-minion01.startit.com.br
+192.168.1.202 ansible_hostname=node-minion02.startit.com.br
+#192.168.1.203 ansible_hostname=node-minion03.startit.com.br
+#192.168.1.204 ansible_hostname=node-minion04.startit.com.br
+
+
+[rancher:vars]
+ansible_become=yes
+ansible_become_method=enable
+ansible_user=root
+ansible_password=123qwe!@#
